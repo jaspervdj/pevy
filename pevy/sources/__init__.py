@@ -4,6 +4,6 @@ import pevy.sources.slack
 
 sources = {
     'facebook': facebook.Facebook,
-    # 'twitter':  twitter.Twitter,
-    'slack':    slack.Slack
+    'twitter': twitter.Twitter,
+    'slack': slack.Slack
 }

@@ -5,11 +5,9 @@ import sys
 import time
 
 import pevy.database
-import pevy.sources
-import pevy.sources.twitter
-import pevy.sources.facebook
-import pevy.sources.slack
 import pevy.printer
+import pevy.resolve
+import pevy.sources
 
 class App:
     def __init__(self):
@@ -42,6 +40,7 @@ class App:
 
     def run(self):
         while True:
+            pevy.resolve.reset()
             self.__poll_for_items()
             self.__print_items()
             self.logger.info('Sleeping for some time...')

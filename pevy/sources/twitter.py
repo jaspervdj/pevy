@@ -5,19 +5,27 @@ import pevy.models
 
 class Twitter:
     def __init__(self, logger, config):
-        self.api = twitter.Api(
-                consumer_key=config['consumer_key'],
-                consumer_secret=config['consumer_secret'],
-                access_token_key=config['access_token_key'],
-                access_token_secret=config['access_token_secret'])
-        logger.info('Verifying twitter credentials...')
-        result = self.api.VerifyCredentials()
-        logger.info('Twitter verification ok, id = {}'.format(result.id))
+        self.logger = logger
+        self.consumer_key = config['consumer_key']
+        self.consumer_secret = config['consumer_secret']
+        self.access_token_key = config['access_token_key']
+        self.access_token_secret = config['access_token_secret']
         self.hashtag = config['hashtag']
 
     def poll(self):
+        api = twitter.Api(
+                consumer_key=self.consumer_key,
+                consumer_secret=self.consumer_secret,
+                access_token_key=self.access_token_key,
+                access_token_secret=self.access_token_secret)
+
+        self.logger.info('Verifying twitter credentials...')
+        credentials = api.VerifyCredentials()
+        self.logger.info(
+                'Twitter verification ok, id = {}'.format(credentials.id))
+
         term = '#' + self.hashtag
-        results = self.api.GetSearch(term=term, result_type='recent',
+        results = api.GetSearch(term=term, result_type='recent',
                 include_entities=True, count=100)
         for result in results:
             yield self.__tweet_to_item(result)
