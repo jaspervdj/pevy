@@ -5,7 +5,10 @@ import sys
 import time
 
 import pevy.database
+import pevy.sources
 import pevy.sources.twitter
+import pevy.sources.facebook
+import pevy.sources.slack
 import pevy.printer
 
 class App:
@@ -31,11 +34,11 @@ class App:
         self.printer = pevy.printer.Printer(self.logger)
 
         self.sources = {}
-
-        if 'twitter' in config.sections():
-            twitter = pevy.sources.twitter.Twitter(
-                    self.logger, config['twitter'])
-            self.sources['twitter'] = twitter
+        for k in pevy.sources.sources:
+            constructor = pevy.sources.sources[k]
+            if k in config.sections():
+                source = constructor(self.logger, config[k])
+                self.sources[k] = source
 
     def run(self):
         while True:
@@ -50,8 +53,9 @@ class App:
             try:
                 self.logger.info('Polling source {}...'.format(k))
                 items = source.poll()
-                for item in items:
-                    self.database.queue_item(item)
+                if items:
+                    for item in items:
+                        self.database.queue_item(item)
             except (KeyboardInterrupt, SystemExit):
                 raise
             except Exception as e:
