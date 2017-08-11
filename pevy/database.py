@@ -12,6 +12,7 @@ class Database:
         self.logger.info('Setting up database...')
         self.conn.execute("""CREATE TABLE IF NOT EXISTS items (
                 id      STRING PRIMARY KEY NOT NULL,
+                author  STRING NOT NULL,
                 text    STRING,
                 image   BLOB,
                 printed INT
@@ -24,17 +25,17 @@ class Database:
 
     def queue_item(self, item):
         self.conn.execute("""INSERT OR IGNORE INTO items
-                (id, text, image, printed) VALUES (?, ?, ?, ?)""",
-                (item.id, item.text, item.image, 0))
+                (id, author, text, image, printed) VALUES (?, ?, ?, ?, ?)""",
+                (item.id, item.author, item.text, item.image, 0))
         self.conn.commit()
 
     def get_unprinted_items(self):
         cur = self.conn.cursor()
-        result = cur.execute("""SELECT id, text, image FROM items
+        result = cur.execute("""SELECT id, author, text, image FROM items
                 WHERE printed = 0""")
         for row in result:
-            item = pevy.models.Item(id=row[0], text=row[1], image=row[2])
-            yield item
+            yield pevy.models.Item(id=row[0], author=row[1],
+                    text=row[2], image=row[3])
 
     def mark_item_as_printed(self, item):
         self.conn.execute(

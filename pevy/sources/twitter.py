@@ -24,6 +24,7 @@ class Twitter:
 
     def __tweet_to_item(self, tweet):
         id = 'twitter/' + str(tweet.id)
+        author = tweet.user.screen_name
         text = tweet.text
         image = None
 
@@ -33,4 +34,4 @@ class Twitter:
                 photo = photos[0]
                 image = requests.get(photo.media_url).content
 
-        return pevy.models.Item(id=id, text=text, image=image)
+        return pevy.models.Item(id=id, author=author, text=text, image=image)
