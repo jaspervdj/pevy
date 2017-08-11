@@ -44,7 +44,7 @@ class App:
             self.__poll_for_items()
             self.__print_items()
             self.logger.info('Sleeping for some time...')
-            time.sleep(60)
+            time.sleep(20)
 
     def __poll_for_items(self):
         for k in self.sources:
@@ -61,11 +61,11 @@ class App:
                 self.logger.error(e)
 
     def __print_items(self):
-        try:
-            for item in self.database.get_unprinted_items():
+        for item in self.database.get_unprinted_items():
+            try:
                 self.printer.print_item(item)
                 self.database.mark_item_as_printed(item)
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except Exception as e:
-            self.logger.error(e)
+            except (KeyboardInterrupt, SystemExit):
+                raise
+            except Exception as e:
+                self.logger.error(e)

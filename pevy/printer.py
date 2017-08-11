@@ -1,6 +1,9 @@
 import subprocess
 import tempfile
 
+class PrinterException(Exception):
+    pass
+
 class Printer:
     def __init__(self, logger):
         self.logger = logger
@@ -12,18 +15,29 @@ class Printer:
 
     def __print_text(self, text):
         text = text.encode('utf-8')
-        self.__call_lpr(text, [])
+        command = [
+                "paps",
+                "--font='Noto Emoji'",
+                "--paper=a4",
+                "--left-margin=18",
+                "--right-margin=452",
+                "--top-margin=18",
+                "--encoding='UTF-8'"]
+        (exitcode, pscontent, _) = self.__call_proc(command, text)
+        with tempfile.NamedTemporaryFile() as psfile:
+            psfile.write(pscontent)
+            psfile.flush()
+            self.__call_proc(['lpr', psfile.name])
 
     def __print_image(self, image):
-        with tempfile.NamedTemporaryFile() as f:
-            f.write(image)
-            f.flush()
-            self.__call_lpr('', ['-o', 'fit-to-page', f.name])
+        with tempfile.NamedTemporaryFile() as imgfile:
+            imgfile.write(image)
+            imgfile.flush()
+            self.__call_proc(['lpr', '-o', 'fit-to-page', imgfile.name])
 
-    def __call_lpr(self, proc_input, args):
-        command = ['lpr'] + args
-        self.logger.info('Running: ' + ' '.join(command))
-        proc = subprocess.Popen(command,
+    def __call_proc(self, proc_args, proc_input = ''):
+        self.logger.info('Running: ' + ' '.join(proc_args))
+        proc = subprocess.Popen(proc_args,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
@@ -31,8 +45,8 @@ class Printer:
         (outs, errs) = proc.communicate(proc_input)
         exit_code = proc.returncode
         if exit_code == 0:
-            self.logger.info('lpr process finished normally')
+            return (exit_code, outs, errs)
         else:
-            self.logger.error(
-                    'lpr process exited with code {}'.format(str(exit_code)))
             self.logger.error(errs)
+            raise PrinterException(
+                    'lpr process exited with code {}'.format(str(exit_code)))

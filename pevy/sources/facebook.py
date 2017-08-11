@@ -14,6 +14,7 @@ class Facebook:
 
         path = self.group_id + '/feed'
         feed = graph.get_object(path)
+        feed['data'].reverse()
         for story in feed['data']:
             message = graph.get_object(story['id'],
                     fields='from,message,picture')
