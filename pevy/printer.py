@@ -1,14 +1,28 @@
 import subprocess
+import tempfile
 
 class Printer:
     def __init__(self, logger):
         self.logger = logger
 
-    def print(self, item):
-        proc_input = '>>> ' + item.author + ' >>> ' + item.text
-        proc_input = proc_input.encode('utf-8')
+    def print_item(self, item):
+        self.__print_text(item.author + ': ' + item.text)
+        if item.image:
+            self.__print_image(item.image)
 
-        command = ['cat', '-']
+    def __print_text(self, text):
+        text = text.encode('utf-8')
+        self.__call_lpr(text, [])
+
+    def __print_image(self, image):
+        with tempfile.NamedTemporaryFile() as f:
+            f.write(image)
+            f.flush()
+            self.__call_lpr('', ['-o', 'fit-to-page', f.name])
+
+    def __call_lpr(self, proc_input, args):
+        command = ['lpr'] + args
+        self.logger.info('Running: ' + ' '.join(command))
         proc = subprocess.Popen(command,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,

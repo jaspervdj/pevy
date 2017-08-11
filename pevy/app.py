@@ -63,7 +63,7 @@ class App:
     def __print_items(self):
         try:
             for item in self.database.get_unprinted_items():
-                self.printer.print(item)
+                self.printer.print_item(item)
                 self.database.mark_item_as_printed(item)
         except (KeyboardInterrupt, SystemExit):
             raise
