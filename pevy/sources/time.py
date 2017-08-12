@@ -14,8 +14,8 @@ class Time:
 
         now = datetime.datetime.now()
         if self.last_update:
-            delta = self.last_update - now
-            if delta.seconds > self.interval:
+            delta = now - self.last_update
+            if delta.total_seconds() > self.interval:
                 self.last_update = now
                 yield self.__time_item()
         else:
