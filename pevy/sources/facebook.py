@@ -19,15 +19,16 @@ class Facebook:
             message = graph.get_object(story['id'],
                     fields='from,message,picture')
 
+            id = 'facebook/' + str(message['id'])
+            author = message['from']['name']
+            text = None
+            image = None
+
             if 'message' in message:
-
-                id = 'facebook/' + str(message['id'])
-                author = message['from']['name']
                 text = message['message']
-                image = None
 
-                if 'picture' in message:
-                    image = requests.get(message['picture']).content
+            if 'picture' in message:
+                image = requests.get(message['picture']).content
 
-                yield pevy.models.Item(
-                        id=id, author=author, text=text, image=image)
+            yield pevy.models.Item(
+                    id=id, author=author, text=text, image=image)
