@@ -9,10 +9,13 @@ class Printer:
         self.logger = logger
 
     def print_item(self, item):
-        if item.text:
+        if item.text and item.author:
             self.__print_text(item.author + ': ' + item.text)
-        else:
-            self.__print_text(item.author)
+        elif item.author and item.image:
+            self.__print_text(item.author + ' added an image:')
+        elif item.text:
+            self.__print_text(item.text)
+
         if item.image:
             self.__print_image(item.image)
 

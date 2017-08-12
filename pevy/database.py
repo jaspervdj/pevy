@@ -12,7 +12,7 @@ class Database:
         self.logger.info('Setting up database...')
         self.conn.execute("""CREATE TABLE IF NOT EXISTS items (
                 id      STRING PRIMARY KEY NOT NULL,
-                author  STRING NOT NULL,
+                author  STRING,
                 text    STRING,
                 image   BLOB,
                 printed INT
