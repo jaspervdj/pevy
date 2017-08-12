@@ -25,9 +25,9 @@ class Printer:
                 "paps",
                 "--font='Noto Emoji'",
                 "--paper=a4",
-                "--left-margin=18",
-                "--right-margin=452",
-                "--top-margin=18",
+                "--left-margin=8",
+                "--right-margin=462",
+                "--top-margin=8",
                 "--encoding='UTF-8'"]
         (exitcode, pscontent, _) = self.__call_proc(command, text)
         with tempfile.NamedTemporaryFile() as psfile:
