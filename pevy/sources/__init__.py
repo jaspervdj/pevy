@@ -4,8 +4,8 @@ import pevy.sources.slack
 import pevy.sources.time
 
 sources = {
-    # 'facebook': facebook.Facebook,
-    # 'twitter': twitter.Twitter,
-    # 'slack': slack.Slack,
+    'facebook': facebook.Facebook,
+    'twitter': twitter.Twitter,
+    'slack': slack.Slack,
     'time': time.Time,
 }
