@@ -23,7 +23,7 @@ Description=pevy
 
 [Service]
 Type=simple
-User=pi
+User=$PEVY_USER
 WorkingDirectory=$PEVY_DIR
 ExecStart=/bin/sh -c "$ENV_DIR/bin/pevy -c $PEVY_DIR/pevy.conf >>$PEVY_DIR/pevy.log 2>&1"
 
