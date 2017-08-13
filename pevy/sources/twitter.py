@@ -43,3 +43,6 @@ class Twitter:
                 image = requests.get(photo.media_url).content
 
         return pevy.models.Item(id=id, author=author, text=text, image=image)
+
+    def __str__(self):
+        return 'Twitter ({})'.format(self.hashtag)

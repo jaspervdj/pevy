@@ -15,3 +15,7 @@ python setup.py install
 ```bash
 pevy -c pevy.conf
 ```
+
+```bash
+paps --top-margin=0 --left-margin=0 --right-margin=436 --font='Noto Sans 12'
+```

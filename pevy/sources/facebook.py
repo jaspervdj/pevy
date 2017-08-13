@@ -32,3 +32,6 @@ class Facebook:
 
             yield pevy.models.Item(
                     id=id, author=author, text=text, image=image)
+
+    def __str__(self):
+        return 'Facebook ({})'.format(self.group_id)

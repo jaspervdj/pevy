@@ -26,3 +26,6 @@ class Time:
         id = 'time/' + str(time.time())
         text = time.ctime()
         return pevy.models.Item(id=id, author=None, text=text, image=None)
+
+    def __str__(self):
+        return 'time'

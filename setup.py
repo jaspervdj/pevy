@@ -10,7 +10,7 @@ setup(
     license='MIT',
     packages=['pevy', 'pevy.sources'],
     install_requires=['requests', 'python-twitter', 'slackclient',
-            'facebook-sdk'],
+            'facebook-sdk', 'pyyaml'],
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.

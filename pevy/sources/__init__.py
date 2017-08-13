@@ -7,5 +7,5 @@ sources = {
     'facebook': facebook.Facebook,
     'twitter': twitter.Twitter,
     'slack': slack.Slack,
-    'time': time.Time,
+    'time': time.Time
 }

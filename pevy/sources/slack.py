@@ -4,3 +4,6 @@ class Slack:
 
     def poll(self):
         pass
+
+    def __str__(self):
+        return 'Slack'

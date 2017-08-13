@@ -1,8 +1,8 @@
 from optparse import OptionParser
-import configparser
 import logging
 import sys
 import time
+import yaml
 
 import pevy.database
 import pevy.printer
@@ -23,20 +23,21 @@ class App:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger('pevy')
 
-        config = configparser.ConfigParser()
-        config.read(options.config)
+        with open(options.config, 'r') as config_file:
+            config = yaml.load(config_file)
 
-        database_path = config['database']['path']
+        database_path = config['database_path']
         self.database = pevy.database.Database(self.logger, database_path)
 
         self.printer = pevy.printer.Printer(self.logger)
 
-        self.sources = {}
-        for k in pevy.sources.sources:
+        self.sources = []
+
+        for section in config['sources']:
+            k = section['type']
             constructor = pevy.sources.sources[k]
-            if k in config.sections():
-                source = constructor(self.logger, config[k])
-                self.sources[k] = source
+            source = constructor(self.logger, section)
+            self.sources += [source]
 
     def run(self):
         while True:
@@ -44,13 +45,12 @@ class App:
             self.__poll_for_items()
             self.__print_items()
             self.logger.info('Sleeping for some time...')
-            time.sleep(20)
+            time.sleep(40)
 
     def __poll_for_items(self):
-        for k in self.sources:
-            source = self.sources[k]
+        for source in self.sources:
             try:
-                self.logger.info('Polling source {}...'.format(k))
+                self.logger.info('Polling source {}...'.format(str(source)))
                 items = source.poll()
                 if items:
                     for item in items:
