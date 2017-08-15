@@ -2,20 +2,19 @@
 
 ![pevy](extra/pevy.png?raw=true)
 
-## Installation
+## Development with virtualenv
 
 ```bash
 virtualenv env
 source env/bin/activate
 python setup.py install
+pevy -c pevy.yaml
 ```
 
-## Running
+## Deployment using systemd
 
 ```bash
-pevy -c pevy.conf
-```
-
-```bash
-paps --top-margin=0 --left-margin=0 --right-margin=436 --font='Noto Sans 12'
+./install.sh
+systemctl status pevy
+tail -f pevy.log
 ```
